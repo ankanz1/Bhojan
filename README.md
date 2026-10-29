@@ -2,7 +2,8 @@
 
 <img src="apps/web/public/bhojan-lockup.svg" alt="Bhojan" width="520">
 
-<img src="docs/orderrestro-cover.jpg" alt="Illustrative evening scene in an independent restaurant" width="100%">
+<img width="736" height="414" alt="image" src="https://github.com/user-attachments/assets/5bc95ab4-fb48-4a85-9f61-0f40562e3920" />
+
 
 **Open-source, self-hosted restaurant POS & management system** — billing
 with **UPI QR payments**, tables, kitchen display (KDS), reservations,
