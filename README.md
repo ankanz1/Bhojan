@@ -21,10 +21,6 @@ dine-in, takeaway, delivery and kitchen operations.
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
 [![Status](https://img.shields.io/badge/status-active%20development-orange.svg)](./ROADMAP.md)
 
-Developed by [NodeDR Infotech Private Limited](https://www.nodedr.com/)
-
-**[Historical case study](https://www.raktimranjit.com/projects/orderrestro)** · **[Maintainer: Raktim Ranjit](https://www.raktimranjit.com/)**
-
 <p align="center">
   <img src="docs/assets/hero-animated.svg" alt="Bhojan: animated overview with an illustrative sample screen" width="100%">
 </p>
