@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 128" role="img" aria-label="Bhojan">
+  <rect width="128" height="128" rx="28" fill="#9f1239"/>
+  <circle cx="64" cy="66" r="39" fill="none" stroke="#fff7ed" stroke-width="6"/>
+  <circle cx="64" cy="66" r="25" fill="none" stroke="#fff7ed" stroke-width="3" opacity=".8"/>
+  <path d="M52 37v20m-8-20v12a8 8 0 0 0 16 0V37m-8 20v34m26-54c-8 7-11 17-11 29v5h11v20" fill="none" stroke="#fff7ed" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="154" y="85" fill="#fff7ed" font-family="Arial,Helvetica,sans-serif" font-size="68" font-weight="700" letter-spacing="-2">Bhojan</text>
+</svg>
