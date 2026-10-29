@@ -1,525 +1,228 @@
 <div align="center">
 
-<img width="2172" height="724" alt="image" src="https://github.com/user-attachments/assets/4f646e91-c82d-4a6e-a5ba-191b5112ea82" />
+<img src="apps/web/public/bhojan-lockup.svg" alt="Bhojan" width="420">
 
+<h1>Restaurant service, in one place.</h1>
 
-<img width="736" height="414" alt="image" src="https://github.com/user-attachments/assets/5bc95ab4-fb48-4a85-9f61-0f40562e3920" />
+**Bhojan is a self-hosted restaurant operations platform for taking orders, serving the kitchen, managing stock, and running the business from one system.**
 
+Built for independent restaurants and multi-branch teams that want to run their own point of sale and keep operational data on infrastructure they control.
 
-**Open-source, self-hosted restaurant POS & management system** — billing
-with **UPI QR payments**, tables, kitchen display (KDS), reservations,
-inventory, **staff attendance & payroll**, accounting, reports, CRM/loyalty
-and multi-branch control. Offline-first, runs on your own server, no
-subscription. Not a retail POS bolted onto a restaurant; purpose-built for
-dine-in, takeaway, delivery and kitchen operations.
+[![AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
+[![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-339933?logo=node.js&logoColor=white)](package.json)
+[![Next.js](https://img.shields.io/badge/web-Next.js-111111?logo=next.js)](apps/web/package.json)
+[![NestJS](https://img.shields.io/badge/API-NestJS-E0234E?logo=nestjs)](apps/backend/package.json)
+[![PostgreSQL](https://img.shields.io/badge/database-PostgreSQL-4169E1?logo=postgresql&logoColor=white)](docker-compose.yml)
+[![Status: in development](https://img.shields.io/badge/status-in_development-orange.svg)](ROADMAP.md)
 
-[![License: AGPL v3](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](./LICENSE)
-[![Node](https://img.shields.io/badge/node-%3E%3D22-339933?logo=node.js&logoColor=white)](package.json)
-[![pnpm](https://img.shields.io/badge/pnpm-workspaces-F69220?logo=pnpm&logoColor=white)](pnpm-workspace.yaml)
-[![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?logo=typescript&logoColor=white)](apps/web/tsconfig.json)
-[![NestJS](https://img.shields.io/badge/backend-NestJS-E0234E?logo=nestjs&logoColor=white)](apps/backend)
-[![Next.js](https://img.shields.io/badge/frontend-Next.js-000000?logo=next.js&logoColor=white)](apps/web)
-[![CasaOS / ZimaOS](https://img.shields.io/badge/CasaOS%20%2F%20ZimaOS-one--click%20app-1F6FEB)](casaos/README.md)
-[![PRs welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](./CONTRIBUTING.md)
-[![Status](https://img.shields.io/badge/status-active%20development-orange.svg)](./ROADMAP.md)
-
-<p align="center">
-  <img src="docs/assets/hero-animated.svg" alt="Bhojan: animated overview with an illustrative sample screen" width="100%">
-</p>
-
-
-[Quick Start](#quick-start) ·
-[How to use](#how-to-use-bhojan) ·
-[Full tutorial](./TUTORIAL.md) ·
-[Features](#features) ·
-[Screenshots](#screenshots) ·
-[Docs](#documentation) ·
-[Contributing](#contributing) ·
-[Roadmap](./ROADMAP.md)
+[Quick start](#quick-start) · [Features](#what-bhojan-includes) · [Screenshots](#screenshots) · [Development](#local-development) · [Documentation](#documentation) · [FAQ](#faq)
 
 </div>
 
----
-
-## What this is
-
-**Bhojan** is a purpose-built, offline-first Restaurant
-Management System for restaurants, cafés, coffee shops, bakeries, fast
-food, fine dining, bars, food courts, cloud kitchens, and multi-branch
-chains. The whole stack — Postgres, API, and web app — runs on one local
-server on the restaurant's own LAN: order-taking, billing, KDS, and
-printing all keep working with the WAN cable unplugged. No subscription,
-no forced cloud dependency, self-hosted by design.
-
-It's a sister project to [`nodedr-pos`](https://github.com/Raktim94/nodedr-pos)
-(the retail-shop POS), reusing its proven patterns — auth/session model,
-receipt rendering, ESC/POS printing, currency-rounding discipline — but
-built as its own codebase, because restaurant floor/kitchen/reservation
-operations and retail shop billing are different enough domains that
-forcing one schema to serve both would have compromised both. See
-[`PROJECT.md`](./PROJECT.md) for the full rationale.
-
-**Non-negotiable product principles** (the short version — full detail in
-[`PROJECT.md`](./PROJECT.md)):
-
-1. **Offline-first / self-hosted** — a single branch runs entirely on a
-   local LAN server, zero internet dependency once installed.
-2. **Premium, not "POS-ugly"** — every screen is held to the same bar as
-   Stripe Dashboard, Linear, Notion, Vercel, Shopify Admin.
-3. **RBAC everywhere** — every action gated by a granular, individually
-   toggleable permission, never a hardcoded role check.
-4. **Modular / plugin-ready** — 20 product domains that can evolve
-   independently.
-5. **Server-authoritative money** — all pricing, tax, discount, and
-   loyalty math computed server-side, never trusted from the client.
-
-## Where to run it
-
-"Offline-first" describes how the app runs, not where it has to live —
-nothing about it is tied to a specific machine or network:
-
-- **A local LAN server (the default, recommended setup).** One machine in
-  the restaurant runs `docker compose up`; every till, tablet, and KDS
-  screen on the same Wi-Fi/Ethernet reaches it at `http://<that machine's
-  LAN IP>:1995`. No internet connection is needed once it's running —
-  order-taking, billing, KDS, and printing all keep working with the WAN
-  cable unplugged.
-- **Any VPS or cloud box.** The identical `docker compose up` also runs
-  unmodified on a VPS (DigitalOcean, Hetzner, AWS, etc.) if you'd rather
-  manage one restaurant — or several branches — remotely instead of on
-  site. Point `FRONTEND_ORIGIN`/`HOST_PORT` in `.env` at that box instead
-  of `localhost`; nothing else changes.
-- **Behind a tunnel (Cloudflare Tunnel, ngrok, Tailscale Funnel, or any
-  reverse proxy).** Reachable from outside the LAN with a real HTTPS
-  certificate and no port-forwarding, by pointing the tunnel at the `web`
-  service's port (`1995` by default). Once traffic reaches the app over
-  `https://`, set **`COOKIE_SECURE=true`** in `.env` so the session cookie
-  is marked `Secure` — leave it `false` (the default) for a plain
-  `http://` LAN/VPS setup, since a browser silently refuses to store a
-  `Secure` cookie on a non-HTTPS origin, which locks every user out with
-  "Unauthorized" even though login appears to succeed.
-
-Whichever way you reach it, it's the same three containers, same data, same
-login — there's no separate "cloud" mode to configure.
-
-- **CasaOS / ZimaOS.** Pre-built, multi-arch (amd64/arm64) images are
-  published to GHCR and there's a ready-to-install app manifest — no build
-  step, no `git clone` needed. Install directly from a compose URL today;
-  see [`casaos/README.md`](casaos/README.md). Official app store submission
-  pending.
-
-### Windows desktop client
-
-However you host the server above, tills that are Windows machines don't
-have to use a browser tab: `windows/msix/` packages a thin native client
-(WinForms + WebView2, not Electron — no bundled Chromium, no server, no
-Docker) with a Start Menu entry that points at your server's address and
-otherwise just shows the same web UI. See
-[`windows/msix/README.md`](windows/msix/README.md) for what it is/isn't,
-build instructions, and the full capability list.
-
-Status: the build, package, install, and Start Menu registration are all
-machine-verified on every push via GitHub Actions (`windows-msix.yml`,
-real `windows-latest` runner) — not just "it compiled." What that CI run
-does **not** cover: a physical Windows machine (Start Menu tile look,
-taskbar icon, DPI scaling, upgrade-in-place), a real thermal printer, or
-Microsoft Store certification (WACK) — see `windows/msix/README.md` and
-[`SECURITY-AUDIT-REPORT.md`](./SECURITY-AUDIT-REPORT.md) for the full
-verified-vs-not-tested breakdown before relying on it in production.
-
-## Features
-
-Full field-level detail for every module lives in [`ROADMAP.md`](./ROADMAP.md).
-This is the complete 20-module scope from the original brief — **not**
-all built yet; ✅ = done and verified end-to-end, 🚧 = planned, sequenced
-by phase.
-
-| | Module | Status |
-|---|---|---|
-| 1 | POS & Billing — dine-in/takeaway, bill merge, multi-region tax (India GST, US Sales Tax, EU VAT, Spain IVA), discounts, gift cards, tips, payments, refunds; equal split is display-only and split tender is pending | ✅ core · 🚧 split billing/payment |
-| 2 | Table & Reservation Management — visual floor plan, booking, waitlist, QR table ordering, table transfer | ✅ |
-| 3 | Kitchen Management (KDS) — display, KOTs, multi-station routing, prep tracking, performance reporting | ✅ |
-| 4 | Menu Management — categories, modifier groups, combos, seasonal menus, availability scheduling | ✅ |
-| 5 | Inventory & Store Management — ingredients, recipe costing, POs, suppliers, GRN, waste, batch/lot | ✅ |
-| 6 | Procurement — vendor quotations, purchase requests/orders, invoices, supplier payments, and supplier performance | ✅ core · 🚧 returns, price variance, reorder suggestions |
-| 7 | CRM — profiles, loyalty points, memberships, gift vouchers, feedback, visit history | ✅ |
-| 8 | Staff Management — accounts & roles, attendance (clock in/out), shift scheduling with clash checks, leave, payroll from clocked hours, tip pool split by hours | ✅ |
-| 9 | Accounting — expenses, nightly cash close with variance, profit & loss, balance sheet, budgets vs actual, bank-statement reconciliation, tax summary by rate | ✅ |
-| 10 | Delivery Management — zones by pincode, fee/minimum/ETA, driver assignment, status flow | ✅ · 🚧 live GPS, 3rd-party platforms |
-| 11 | Online Ordering — QR table ordering with modifiers, call waiter, request bill, click & collect, scheduled orders | ✅ |
-| 12 | Branch Management — branch switcher, cross-branch overview, branch-to-branch stock transfers | ✅ |
-| 13 | Analytics — live dashboard plus 18 reports (peak hours, food cost & margins, retention…) with print, CSV, Excel and PDF export, and scheduled report emails | ✅ |
-| 14 | Marketing — coupons, happy-hour discounts, email (your SMTP) / SMS / WhatsApp campaigns with opt-out | ✅ |
-| 15 | Finance — daily cash closing, expenses, monthly budgets | ✅ · 🚧 petty cash, expense approvals |
-| 16 | Maintenance — equipment register, service schedules with overdue flags | ✅ |
-| 17 | Documents — SOPs, contracts, recipes, purchase paperwork, with file attachments (PDF, images, Office) | ✅ |
-| 18 | Security — RBAC, audit log, two-factor sign-in with recovery codes, backup/restore, session expiry, PIN login | ✅ |
-| 19 | Integrations — **UPI QR payments with payment-received sound**, customer-facing second screen, direct-USB ESC/POS printing + cash drawer, signed webhooks, SMTP email, REST/Swagger and [API & MCP server](./docs/integrations-api.md) | ✅ · 🚧 payment-gateway checkout, accounting & delivery-platform connectors |
-| 20 | Admin Panel — restaurant/branch settings, per-branch tax regime, UPI payee, roles, permissions | ✅ |
-
-Already shipped and running against real Docker/Postgres today: auth +
-RBAC, full menu management (incl. combo meals), floor/table view with
-waitlist and merge, reservations, table QR codes with a public read-only
-menu view, POS order-taking with modifiers, KOT generation routed to
-kitchen stations (priority/reprint/performance reporting), a live Kitchen
-Display Screen, billing + checkout (tips, split-bill calculator, gift
-cards, loyalty points, refunds), customer CRM, a real-time dashboard, and
-inventory & store management — ingredients, weighted-average recipe
-costing, suppliers, purchase orders, goods receipts with batch/lot +
-expiry tracking, FIFO waste logging, and automatic ingredient deduction
-on checkout (combo-aware, never blocks a sale on a stock shortfall).
-Also shipped: printable receipts (opens the browser's print dialog, same
-"any printer, or Save as PDF" approach as [`nodedr-pos`](https://github.com/Raktim94/nodedr-pos)),
-a Settings area (restaurant + branch details, per-branch tax regime — India
-GST/US Sales Tax/EU VAT/Spain IVA, tax-inclusive or -exclusive menu
-pricing) and staff account management (create/deactivate staff, assign
-roles) under **Settings** in the sidebar, photo upload on menu items, and
-an English/Spanish/French language switcher on the guest-facing QR
-ordering page and staff sidebar.
-
-## Why Bhojan
-
-- **UPI-first checkout (India)** — pick UPI and a QR for the exact bill
-  amount appears at the till *and* on the customer-facing screen; a
-  "payment received" chime plays when the sale is closed. No gateway fees,
-  money goes straight to your UPI id. See the [tutorial](./TUTORIAL.md#upi-qr-payments-and-the-customer-display).
-- **Runs without the internet** — one Docker Compose stack on a local
-  server; billing, KDS and printing survive a dead WAN link.
-- **Your data, your server** — AGPL-3.0, no per-terminal licence, no
-  vendor lock-in. Backup and restore from the app.
-- **Whole-restaurant scope** — POS, kitchen, inventory, payroll, accounting
-  and reporting in one app instead of five subscriptions.
-- **India-ready** — GST (inclusive or exclusive), UPI, ₹ formatting, plus
-  US sales tax, EU VAT and Spanish IVA for other markets.
-
-## How to use Bhojan
-
-Start with the [screenshot-guided tutorial](./TUTORIAL.md) for the full
-first-run walkthrough. It covers sign-up, setup, daily service, and the
-management tools with **56 screenshots of the app**.
-
-1. **Set up your restaurant.** Create the owner account, then enter your
-   restaurant details, branch address, currency, timezone, tax settings, and
-   UPI payee in **Settings**.
-2. **Add the menu and floor.** Create categories, dishes, options and combos;
-   add floors and tables. Add ingredients and recipes if you want stock usage
-   and food cost tracked automatically.
-3. **Take an order.** In **Point of Sale**, choose dine-in, takeaway, or
-   delivery, add dishes and modifiers, then send the order to the kitchen.
-4. **Prepare and collect payment.** The **Kitchen Display** updates live.
-   At checkout, take cash, card, or UPI; for UPI, the app shows a QR code for
-   the exact amount. Confirm the payment in your UPI app before completing the
-   sale.
-5. **Run the shift.** Use **Tables**, **Reservations**, **Customers**,
-   **Inventory**, **Team**, and **Reports** to manage the floor, regulars,
-   stock, staff, and daily close.
-
 <p align="center">
-  <a href="./TUTORIAL.md"><strong>Open the complete tutorial →</strong></a>
-  &nbsp; · &nbsp;
-  <a href="./docs/orderrestro-manual.html">View the user manual</a>
+  <img src="docs/assets/hero-animated.svg" alt="Illustrated overview of Bhojan restaurant operations" width="100%">
 </p>
-
-## Screenshots
-
-| | |
-|---|---|
-| ![Dashboard](docs/screenshots/dashboard-light.png) | ![Dashboard (dark)](docs/screenshots/dashboard-dark.png) |
-| Dashboard — light | Dashboard — dark |
-| ![Point of Sale](docs/screenshots/pos-light.png) | ![Kitchen Display](docs/screenshots/kds-light.png) |
-| Point of Sale | Kitchen Display — priority ticket, live timers |
-| ![Tables](docs/screenshots/tables-light.png) | ![Reservations](docs/screenshots/reservations-light.png) |
-| Tables — floor view + waitlist | Reservations |
-| ![Customers](docs/screenshots/customers-light.png) | ![Menu](docs/screenshots/menu-light.png) |
-| Customers — CRM + loyalty | Menu management — combo builder |
-| ![Inventory](docs/screenshots/inventory-light.png) | ![Purchase Orders](docs/screenshots/purchase-orders-light.png) |
-| Inventory — ingredients, low-stock, weighted-average cost | Purchase orders — supplier, status, total |
-
-<details>
-<summary>Mobile (390px)</summary>
-
-![Dashboard on mobile](docs/screenshots/dashboard-mobile.png)
-
-</details>
-
-## FAQ
-
-**Is there a free, open-source restaurant POS I can self-host?**
-Yes — Bhojan is AGPL-3.0 and installs with `docker compose up`, or as
-a one-click app on CasaOS / ZimaOS.
-
-**Does it support UPI payments and GST billing?**
-Yes. Add your UPI id under *Settings → Restaurant*; checkout then shows a
-scannable QR for the exact amount. GST is configured per branch, inclusive
-or exclusive.
-
-**Does it work offline?**
-Order-taking, billing, the kitchen display and printing run entirely on
-your local server. Only optional features (email, webhooks) need internet.
-
-**Can it manage staff attendance and payroll?**
-Yes: clock in/out, shifts, leave, payroll from clocked hours with unpaid-leave
-deductions, and a tip pool split by hours worked.
-
-**Can I export reports to Excel or PDF?**
-Yes — every report exports to Excel, PDF or CSV, and can be emailed on a
-daily, weekly or monthly schedule through your own SMTP server.
-
-**What is not built yet?** Native payment-gateway checkout, direct
-accounting-software and delivery-platform connectors, weighing-scale and
-label printers, a SQLite edition and native installers. The
-[roadmap](./ROADMAP.md) is explicit about what is done and what is not.
-
-## Tech stack
-
-NestJS (API) + PostgreSQL/Prisma + Next.js (web) + Socket.IO (realtime) in
-a pnpm/Turborepo monorepo. Full rationale for every choice — including why
-NestJS over the plain-Express pattern its sister project uses, and why
-Postgres over the originally-specced SQLite — is in
-[`ARCHITECTURE.md`](./ARCHITECTURE.md).
-
-| Layer | Choice |
-|---|---|
-| Monorepo | pnpm workspaces + Turborepo |
-| Backend | NestJS (TypeScript), REST `/api/v1`, Swagger at `/api/docs` |
-| ORM / DB | Prisma + PostgreSQL |
-| Realtime | Socket.IO (NestJS gateway) — tables, KDS tickets, QR-order status |
-| Frontend | Next.js (App Router) + TypeScript + Tailwind v4 |
-| UI components | shadcn/ui (Base UI primitives), owned source, not a black-box dep |
-| Data fetching | TanStack Query |
-| Forms | React Hook Form + Zod (schemas shared with the backend via `packages/types`) |
-| Tables | TanStack Table |
-| Charts | Recharts |
-| Drag & drop | dnd-kit (floor designer, KDS columns) |
-| i18n | Lightweight client-side context (`apps/web/lib/i18n`) — English/Spanish/French so far, no routing/middleware |
-| Auth | JWT (httpOnly cookie) + PIN quick-switch, optional TOTP 2FA |
-| Containers | Docker + Docker Compose |
 
 ## Quick start
 
-<p align="center">
-  <img src="docs/assets/install-animated.svg" alt="Animated terminal: run the installer from the downloaded source folder" width="100%">
-</p>
-
-
-### Installing Docker
-
-Skip this if `docker --version` already works. Otherwise, pick your OS:
-
-**Linux** (Debian/Ubuntu/Fedora/etc. — official convenience script):
+Requirements: Docker Engine or Docker Desktop with Docker Compose v2, Git, and `curl`. The one-click installer also needs Bash. On macOS use Docker Desktop; on Windows use Docker Desktop with WSL2 or Git Bash; on Linux install Docker Engine and the Compose plugin and ensure your user can access the Docker daemon.
 
 ```bash
-curl -fsSL https://get.docker.com | sudo sh && sudo usermod -aG docker $USER
+git clone https://github.com/ankanz1/Bhojan.git
+cd Bhojan
+./install.sh
 ```
 
-Log out and back in (or run `newgrp docker`) so your user can run `docker`
-without `sudo`.
+The installer creates a `.env` with generated secrets if one does not already exist, builds and starts the Compose services, then waits for the API health check. Open **http://localhost:1995** and create the first restaurant account at **/signup**. A normal install starts without demo data.
 
-**macOS** (via [Homebrew](https://brew.sh)):
+To load sample restaurant data instead, run `./install.sh --demo`. Demo-only sign-in: `owner@demo.local` / `Password123!`. Change or remove this account before using the installation for real operations.
+
+See [Manual Docker Compose setup](#manual-docker-compose-setup) for environment configuration and [Troubleshooting](#troubleshooting) if startup does not complete.
+
+## What Bhojan includes
+
+The following capabilities are implemented in the current application. Details and scope limits are in the [roadmap](ROADMAP.md).
+
+- **Point of sale and billing:** dine-in, takeaway, and delivery orders; modifiers; discounts; tips; gift-card and loyalty redemption; refunds; and cash, card, and UPI payment recording.
+- **Menu and pricing:** categories, items, images, modifier groups, combos, scheduled availability, recipe costing, and branch tax settings.
+- **Tables and reservations:** floor and table management, waitlist, reservations, table transfers, and guest QR table ordering.
+- **Kitchen operations:** live Kitchen Display System, kitchen order tickets, station routing, preparation status, reprints, and kitchen activity views.
+- **Inventory and procurement:** ingredients, recipes, stock deductions, suppliers, purchase requests and orders, quotations, goods receipts, batch/expiry records, stock transfers, and waste logging.
+- **Customers and loyalty:** customer profiles and visit history, points ledger, and gift cards.
+- **Staff operations:** staff accounts and granular roles, attendance, shifts, leave requests, payroll calculations, and tip-pool allocation.
+- **Accounting and reporting:** expenses, cash closing, budgets, tax summaries, financial reports, CSV/Excel/PDF exports, and scheduled report email through configured SMTP.
+- **Delivery and branches:** delivery zones and fees, driver assignment and delivery status, branch switching, cross-branch overview, and stock transfers.
+- **Payments and integrations:** amount-specific UPI QR display, a customer-facing payment screen, REST integration API keys, personal API keys for MCP clients, signed webhooks, and SMTP email.
+- **Security and administration:** httpOnly cookie-based authentication, optional TOTP two-factor authentication, role and permission checks, audit logs, backups and restore, and restaurant/branch settings.
+
+### Scope and verification notes
+
+- UPI QR codes display the payee and amount. Bhojan does not connect to a payment gateway or independently verify settlement; staff record the payment in the app.
+- Delivery status and driver assignment are included. Live GPS tracking and third-party delivery-platform connectors are not.
+- Equal split is a display calculator; separate checks or split tender are not implemented. Loyalty uses a fixed earn/redeem rate rather than configurable membership tiers.
+- ESC/POS printing transports are implemented, but physical printer compatibility must be checked with the hardware used at each site.
+- Tax settings and invoice features do not certify legal compliance. The [VERI*FACTU notes](docs/verifactu.md) document what is implemented and what has not been verified against AEAT’s live services.
+- Bhojan is under active development. Review the [roadmap](ROADMAP.md) and validate your own deployment, data-retention, backup, tax, and hardware requirements before relying on it for business operations.
+
+## Screenshots
+
+These are real guest-facing screens from Bhojan.
+
+<table>
+  <tr>
+    <td align="center"><img src="docs/screenshots/or-qr-table-menu.png" alt="Guest QR ordering entry screen" width="100%"><br><sub>QR table ordering</sub></td>
+    <td align="center"><img src="docs/screenshots/tutorial/customer-display.png" alt="Customer-facing order display" width="100%"><br><sub>Customer display</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="docs/screenshots/tutorial/customer-display-upi.png" alt="Customer-facing UPI QR payment screen" width="100%"><br><sub>UPI amount QR</sub></td>
+    <td align="center"><img src="docs/screenshots/tutorial/customer-display-paid.png" alt="Customer-facing payment confirmation screen" width="100%"><br><sub>Payment confirmation display</sub></td>
+  </tr>
+</table>
+
+## Manual Docker Compose setup
+
+Use this path if you want to review or set configuration values yourself.
 
 ```bash
-brew install --cask docker
+git clone https://github.com/ankanz1/Bhojan.git
+cd Bhojan
+cp .env.example .env
 ```
 
-Then open the Docker.app once from Launchpad/Spotlight to finish setup and
-start the Docker engine — it needs to be running before `docker compose`
-works.
-
-**Windows 10/11** (via [winget](https://learn.microsoft.com/windows/package-manager/winget/), bundled with current Windows):
-
-```powershell
-winget install Docker.DockerDesktop
-```
-
-Reboot if prompted, accept the WSL2 backend if asked, then launch Docker
-Desktop once from the Start menu. Run the install steps below from **WSL2**
-or **Git Bash** (both include the `bash` this project's install script
-needs) — plain PowerShell/cmd can't run a `.sh` file directly.
-
-No hand-holding needed beyond that — all three ship Docker Compose v2
-already bundled, which is all this project requires.
-
-### One-click install
+Edit `.env` before starting. Set unique random values for `POSTGRES_PASSWORD` and `JWT_SECRET` (for example, generate each with `openssl rand -hex 32`). Keep `.env` private; it contains deployment secrets and is ignored by Git. The installer generates these values automatically only when `.env` is absent.
 
 ```bash
-git clone https://github.com/Raktim94/nodedr-restaurant-pos.git && cd nodedr-restaurant-pos && ./install.sh
-```
-
-[`install.sh`](install.sh) generates a `.env` with random secrets (only if
-one doesn't already exist — safe to re-run), builds the backend + web Docker
-images, starts the stack, and waits for the backend to report healthy. Re-run
-it any time after `git pull` to rebuild.
-
-Open **http://localhost:1995** and create your restaurant at `/signup` — no
-demo data is loaded by default. To try the app with sample data instead, run
-`./install.sh --demo` and sign in with `owner@demo.local` / `Password123!`.
-
-The backend API and Swagger docs are reachable only through the web app's
-`/api` proxy, not published directly to the host.
-
-### Manual install
-
-If you'd rather run each step yourself (e.g. to set your own secrets instead
-of generated ones):
-
-```bash
-git clone https://github.com/Raktim94/nodedr-restaurant-pos.git
-cd nodedr-restaurant-pos
-cp .env.example .env        # edit JWT_SECRET / POSTGRES_PASSWORD for anything beyond local dev
 docker compose up -d --build
-docker exec nodedr-restaurant-backend npx ts-node prisma/seed.ts   # optional: demo data + login; upsert-based, safe to re-run
 ```
 
-### Local dev (no Docker for the apps)
+The web application is published on port **1995** by default. Set `HOST_PORT` in `.env` to use another host port. Create the owner account at `http://localhost:1995/signup`. PostgreSQL and uploaded files use persistent Compose volumes.
 
-Requires Node 22+, pnpm, and a local Postgres (or just run the `postgres`
-service from Docker Compose).
+For HTTPS deployments behind a reverse proxy or tunnel, set `FRONTEND_ORIGIN` to the public origin and `COOKIE_SECURE=true` after TLS is configured. Do not enable secure cookies while serving plain HTTP; browsers will reject the session cookie.
 
-```bash
-pnpm install
-docker compose up -d postgres
-cp apps/backend/.env.example apps/backend/.env   # point DATABASE_URL at your Postgres
-pnpm --filter @nodedr-restaurant/types build
-cd apps/backend && npx prisma migrate dev && npx ts-node prisma/seed.ts && cd ../..
-pnpm dev   # runs backend (:4001) and web (:1995) together via Turborepo
-```
+The optional `./install.sh --demo` path seeds sample restaurant data. The ordinary installer does not seed sample users or data.
 
-Full setup detail, coding conventions, and the PR process are in
-[`CONTRIBUTING.md`](./CONTRIBUTING.md).
+### Updating a Docker installation
 
-### Updating
-
-**Docker install (one-click or manual):**
+From the project checkout, fetch the desired source update and rebuild the services:
 
 ```bash
 git pull
 ./install.sh
 ```
 
-Re-running [`install.sh`](install.sh) is safe any time — it never overwrites
-an existing `.env` or touches existing data. It rebuilds the backend + web
-images and restarts the stack; the backend runs `prisma migrate deploy`
-automatically on startup, so any new database migrations from the pull are
-applied before it starts accepting traffic. If you installed manually
-instead, the equivalent is:
+The installer rebuilds and restarts the application services. It does not overwrite an existing `.env`; Compose volumes retain the database and uploads. For a manual installation, use `docker compose up -d --build` after updating the source. Back up important data before upgrades and keep a separate copy of `.env` in a secure location.
+
+## Local development
+
+Local development requires Node.js 22 or newer, pnpm 11.10.0 (available through Corepack), and a PostgreSQL server reachable at the `DATABASE_URL` in `apps/backend/.env`.
 
 ```bash
-git pull
-docker compose up -d --build
+pnpm install
+cp apps/backend/.env.example apps/backend/.env
 ```
 
-**Local dev (no Docker for the apps):**
+Edit `apps/backend/.env` with a valid local database URL and a unique `JWT_SECRET`, then run migrations and start both apps:
 
 ```bash
-git pull
-pnpm install
-pnpm --filter @nodedr-restaurant/types build
-cd apps/backend && npx prisma migrate dev && cd ../..
+(cd packages/types && pnpm build)
+(cd apps/backend && pnpm prisma:migrate)
 pnpm dev
 ```
 
+The web app runs at **http://localhost:3000** and the backend listens on **http://localhost:4001**. Keep the backend port private to the development machine; the web app proxies API requests through `/api`.
+
+Useful workspace commands:
+
+| Command                                 | Purpose                                                 |
+| --------------------------------------- | ------------------------------------------------------- |
+| `pnpm dev`                              | Run the web and backend development servers             |
+| `pnpm build`                            | Build all workspace packages and applications           |
+| `pnpm lint`                             | Run workspace lint checks                               |
+| `pnpm typecheck`                        | Run workspace TypeScript checks                         |
+| `pnpm test`                             | Run backend and web unit tests                          |
+| `(cd apps/backend && pnpm prisma:seed)` | Load demo data into the configured development database |
+
+For a Docker-backed local app, use the [quick start](#quick-start) instead. The Compose PostgreSQL service is internal to the Compose network and is not published on the host by default.
+
+## Technology and architecture
+
+| Area                        | Implementation                                                              |
+| --------------------------- | --------------------------------------------------------------------------- |
+| Monorepo                    | pnpm workspaces and Turborepo                                               |
+| Web application             | Next.js App Router, React, TypeScript, Tailwind CSS                         |
+| Backend API                 | NestJS, TypeScript, REST, Swagger/OpenAPI                                   |
+| Database                    | PostgreSQL with Prisma migrations                                           |
+| Realtime updates            | Socket.IO for kitchen, table, and order status views                        |
+| Shared validation and types | Zod schemas and TypeScript types in `packages/types`                        |
+| Deployment                  | Docker Compose services for web, backend, PostgreSQL, and the update helper |
+
+```mermaid
+flowchart LR
+    Client[Browser or tablet] --> Web[Next.js web app]
+    Web -->|same-origin /api proxy| API[NestJS API]
+    Web <-->|Socket.IO| API
+    API --> DB[(PostgreSQL)]
+    API --> Uploads[(Uploads volume)]
+```
+
+The browser uses the Next.js web service as its same-origin API proxy. In development, Swagger is enabled by default at `/api/docs`; production Swagger is opt-in with `ENABLE_SWAGGER=true`.
+
 ## Monorepo layout
 
-```
-apps/backend    NestJS API (REST /api/v1, Swagger at /api/docs, Socket.IO)
-apps/web        Next.js — back-office, POS, KDS, public QR menu view
-packages/types  Shared Zod schemas / TS types used by both apps
-casaos/         CasaOS/ZimaOS app store manifest + assets — see casaos/README.md
-docs/           Screenshots and supplementary docs
+```text
+apps/
+  web/            Next.js application and browser-facing routes
+  backend/        NestJS API, Prisma schema, migrations, and seed data
+packages/
+  types/          Shared API types, validation schemas, and domain helpers
+docs/             Integration, operations, and product documentation
+packaging/        Debian package and service scripts
+windows/msix/     Windows desktop launcher packaging
+docker-compose.yml
+install.sh
 ```
 
 ## Documentation
 
-| Doc | What's in it |
-|---|---|
-| [`PROJECT.md`](./PROJECT.md) | Source of truth — full vision, non-negotiable principles, complete 20-module scope, current status |
-| [`ARCHITECTURE.md`](./ARCHITECTURE.md) | Tech-stack decisions and the reasoning behind each one |
-| [`ROADMAP.md`](./ROADMAP.md) | Phased build plan / living TODO — checkboxes are the real status |
-| [`DESIGN_SYSTEM.md`](./DESIGN_SYSTEM.md) | Visual language, tokens, type scale, component inventory, per-surface UX notes |
-| [`casaos/README.md`](./casaos/README.md) | CasaOS/ZimaOS one-click install, image publishing, official app store submission steps |
-| [`windows/msix/README.md`](./windows/msix/README.md) | Windows MSIX desktop client — what it is/isn't, build/validate instructions, capabilities, what's CI-verified vs. not tested on real hardware |
-| [`ACCESSIBILITY.md`](./ACCESSIBILITY.md) | WCAG 2.1 AA target, what's implemented, testing methodology, known gaps |
-| [`COMPLIANCE-INDIA.md`](./COMPLIANCE-INDIA.md) | How the architecture relates to the DPDP Act 2023, IT Rules, GST invoicing, and CCPA dark-patterns guidelines |
-| [`docs/verifactu.md`](./docs/verifactu.md) | Spain VERI*FACTU: chained invoice records, QR on the 80 mm receipt and AEAT reporting. Implemented, not certified; what is and is not verified |
-| [`SECURITY-AUDIT-REPORT.md`](./SECURITY-AUDIT-REPORT.md) | Full Critical/High/Medium/Low security audit findings + fixes, and Windows/MSIX Store-readiness status (what's verified vs. not tested) |
-| [`docs/KIOSK-AND-KDS.md`](./docs/KIOSK-AND-KDS.md) | Customer self-service kiosk and kitchen-display (KDS) tablet setup: URL/launch, Android notes, printer/scanner status, tests |
-| [`docs/integrations-api.md`](./docs/integrations-api.md) | MCP server (for AI clients) and the public integration REST API (for an external website's backend) — auth, endpoints, examples |
+- [Screenshot-guided tutorial](TUTORIAL.md) — first-run setup and common workflows.
+- [Architecture](ARCHITECTURE.md) — application boundaries and deployment design.
+- [Product scope](PROJECT.md) and [roadmap](ROADMAP.md) — implementation decisions, completed work, and deferred items.
+- [REST and MCP integration guide](docs/integrations-api.md) — API keys, scopes, routes, and MCP tools.
+- [Kiosk and Kitchen Display](docs/KIOSK-AND-KDS.md) — operational behavior and setup notes.
+- [Permissions, stock, and printing](docs/PERMISSIONS-STOCK-PRINTING.md) — role permissions and implementation details.
+- [India compliance notes](COMPLIANCE-INDIA.md) — technical context for operators; not legal advice.
+- [VERI*FACTU implementation notes](docs/verifactu.md) — implemented scope and verification limitations.
+- [Contributing](CONTRIBUTING.md) — development conventions and contribution workflow.
 
-## Development notes
+## Troubleshooting
 
-- **Server-authoritative pricing** — menu prices are tax-inclusive by
-  default (India GST/EU VAT/Spain IVA); GST/VAT is backed out, never added
-  on top. A branch set to `taxMode: EXCLUSIVE` (the US Sales Tax preset)
-  grosses the price up to an inclusive figure at the one conversion point
-  in `toEffectiveInclusiveUnitPrice` — everything downstream (stored line
-  totals, receipts, refunds) still works off an inclusive amount exactly
-  as before. See `apps/backend/src/modules/orders/pricing.ts` and
-  `packages/types/src/tax.ts` for the regime presets.
-- **Money balances are `set`, never `increment`** — any running balance
-  (loyalty points, gift card balance, wallet credit) is updated via a
-  rounded read-modify-write `set`; DB-side `increment` drifts on Float
-  columns over many transactions.
-- **Shared validation** — Zod schemas in `packages/types` drive both the
-  NestJS `ZodValidationPipe` and the frontend's `react-hook-form`
-  resolvers: one schema per DTO, never duplicated.
-- **Realtime** — `RealtimeGateway` (Socket.IO) pushes KOT/table/order
-  events into a per-branch room; the frontend's `useRealtime` hook
-  invalidates the matching TanStack Query caches instead of polling.
-- **Inventory costing is weighted-average**, recomputed on every goods
-  receipt; waste is drawn FIFO from the oldest stock batch first, so
-  cost-of-waste reporting reflects the batch that actually spoiled, not a
-  blended average. See
-  `apps/backend/src/modules/inventory/goods-receipts.service.ts` and
-  `waste.service.ts`.
-- **Order checkout deducts ingredient stock but never blocks a sale on it**
-  — `StockService.consumeStock(..., allowNegative: true)` lets stock go
-  negative rather than fail a paid order over a recipe-modeling gap; waste
-  logging uses the same function with `allowNegative: false`, since it has
-  no such urgency. See `apps/backend/src/modules/inventory/stock.service.ts`.
+- **Docker is unavailable:** start Docker Desktop or the Docker Engine service, then confirm `docker compose version` works.
+- **The installer cannot reach the app:** inspect `docker compose ps` and `docker compose logs`; wait for PostgreSQL health and backend startup.
+- **Port 1995 is already in use:** set another `HOST_PORT` in `.env`, then rerun the installer or Compose command.
+- **Sign-in works but later requests return Unauthorized over HTTPS:** set `COOKIE_SECURE=true` only when the public site is served over HTTPS, and make `FRONTEND_ORIGIN` match that origin.
+- **A browser on another device cannot connect:** use the server’s LAN address and ensure the host firewall permits the configured web port.
+- **A local-development API request fails:** confirm the PostgreSQL URL and `JWT_SECRET` in `apps/backend/.env`, apply migrations, and check that the backend is listening on port 4001.
+
+## FAQ
+
+**Does Bhojan require a cloud account?** No. The standard deployment runs on your own Docker host. Optional email and external integrations require their respective services.
+
+**Can I use it without internet access?** The core web, API, and database services run locally. Features that contact external systems, such as SMTP delivery or remote integrations, require network access.
+
+**Does the UPI QR confirm that a payment arrived?** No. The QR presents payment details; staff must confirm settlement through their payment app or bank and record the payment in Bhojan.
+
+**Does it support payment gateways or delivery marketplaces?** Not currently. Payment gateway checkout and third-party delivery-platform connectors are not implemented.
+
+**Where are API docs?** Read the [integration guide](docs/integrations-api.md). Swagger is available by default in development at `/api/docs`; production must opt in.
+
+**Is the software certified for tax compliance?** Bhojan does not claim tax certification. Tax configuration is provided for supported regimes; operators should confirm their obligations with a qualified professional. VERI*FACTU support has not been tested against the tax authority’s live services.
 
 ## Contributing
 
-Contributions are very welcome — this is early-stage with a lot of open
-scope (see the feature table above). Start with
-**[`CONTRIBUTING.md`](./CONTRIBUTING.md)**: environment setup, the
-non-negotiable conventions (money rounding, RBAC, shared schemas,
-realtime), commit/PR process, and how to propose bigger architecture
-changes without silently re-litigating a decision already recorded in
-`PROJECT.md`/`ARCHITECTURE.md`.
+Bug reports and code contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), review the [roadmap](ROADMAP.md), and include the steps and environment needed to reproduce a bug.
 
-This project follows the [Contributor Covenant](./CODE_OF_CONDUCT.md).
+## License and attribution
 
-## License
+Bhojan is distributed under the [GNU Affero General Public License, version 3.0](LICENSE) (AGPL-3.0-only).
 
-Copyright © 2026 [Nodedr Infotech Private Limited](https://www.nodedr.com/)
-and Raktim Ranjit. Licensed under the
-[GNU Affero General Public License v3.0](./LICENSE) (AGPL-3.0). In short:
-you're free to self-host, use, and modify this software for your
-restaurant or business. If you modify it and run that modified version
-as a network service for others, you must make your modified source
-available to those users under the same license — this keeps
-improvements to a self-hosted business tool in the open rather than
-disappearing into a closed commercial fork.
-
-See [`MAINTAINERS.md`](./MAINTAINERS.md) for project maintainers.
-
----
-
-<div align="center">
-<img src="apps/web/public/bhojan-mark.svg" alt="Bhojan" width="72">
-</div>
-
-
-## Case study
-
-Read the [historical case study](https://www.raktimranjit.com/projects/orderrestro) for the product background and design decisions.
-
-Maintainer: [Raktim Ranjit](https://www.raktimranjit.com/)
-
----
-
-<sub>Keywords: restaurant POS, open source restaurant management software,
-self-hosted POS, UPI QR payment POS, GST billing software for restaurants,
-kitchen display system, KDS, restaurant inventory management, restaurant
-payroll and attendance, café POS, cloud kitchen software, QR table ordering,
-offline-first POS, NestJS, Next.js, PostgreSQL, Prisma, CasaOS, ZimaOS.</sub>
+See [LICENSE](LICENSE) for the full legal terms and applicable copyright attribution.
