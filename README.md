@@ -1,6 +1,7 @@
 <div align="center">
 
-<img src="apps/web/public/bhojan-lockup.svg" alt="Bhojan" width="520">
+<img width="2172" height="724" alt="image" src="https://github.com/user-attachments/assets/4f646e91-c82d-4a6e-a5ba-191b5112ea82" />
+
 
 <img width="736" height="414" alt="image" src="https://github.com/user-attachments/assets/5bc95ab4-fb48-4a85-9f61-0f40562e3920" />
 
