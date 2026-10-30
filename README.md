@@ -217,9 +217,6 @@ install.sh
 
 **Is the software certified for tax compliance?** Bhojan does not claim tax certification. Tax configuration is provided for supported regimes; operators should confirm their obligations with a qualified professional. VERI*FACTU support has not been tested against the tax authority’s live services.
 
-## Contributing
-
-Bug reports and code contributions are welcome. Start with [CONTRIBUTING.md](CONTRIBUTING.md), review the [roadmap](ROADMAP.md), and include the steps and environment needed to reproduce a bug.
 
 ## License and attribution
 
