@@ -6,7 +6,7 @@
 
 **Bhojan is a self-hosted restaurant operations platform for taking orders, serving the kitchen, managing stock, and running the business from one system.**
 
-Built for independent restaurants and multi-branch teams that want to run their own point of sale and keep operational data on infrastructure they control.
+Built for independent restaurants and multi-branch teams that want to run their own point of sale and keep operational data on infrastructure they control..
 
 [![AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue.svg)](LICENSE)
 [![Node.js 22+](https://img.shields.io/badge/Node.js-22%2B-339933?logo=node.js&logoColor=white)](package.json)
