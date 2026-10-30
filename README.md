@@ -217,7 +217,6 @@ install.sh
 
 **Is the software certified for tax compliance?** Bhojan does not claim tax certification. Tax configuration is provided for supported regimes; operators should confirm their obligations with a qualified professional. VERI*FACTU support has not been tested against the tax authority’s live services.
 
-
 ## License and attribution
 
 Bhojan is distributed under the [GNU Affero General Public License, version 3.0](LICENSE) (AGPL-3.0-only).
