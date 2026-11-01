@@ -66,7 +66,7 @@ The following capabilities are implemented in the current application. Details a
 
 ## Screenshots
 
-These are real guest-facing screens from Bhojan.
+These are real guest-facing screens from Bhojan...
 
 <table>
   <tr>
