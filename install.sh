@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# One-click installer for Bhojan (nodedr-restaurant-pos).
+# One-click installer for Bhojan.
 #
 # Run this from the repo root after cloning:
 #   ./install.sh

@@ -12,7 +12,7 @@
 # running inside WSL2.
 #
 # Usage (run in PowerShell):
-#   irm https://raw.githubusercontent.com/Raktim94/nodedr-restaurant-pos/master/scripts/quickstart.ps1 | iex
+#   irm https://raw.githubusercontent.com/ankanz1/Bhojan/master/scripts/quickstart.ps1 | iex
 #
 # Safe to re-run: every step only acts if the previous one didn't already
 # succeed, and an existing checkout inside WSL2 is updated in place rather
@@ -28,8 +28,8 @@ $ErrorActionPreference = "Stop"
 Set-Location $HOME
 
 $distroName = "Ubuntu"
-$repoDir = "nodedr-restaurant-pos"
-$linuxQuickstartUrl = "https://raw.githubusercontent.com/Raktim94/nodedr-restaurant-pos/master/scripts/quickstart.sh"
+$repoDir = "Bhojan"
+$linuxQuickstartUrl = "https://raw.githubusercontent.com/ankanz1/Bhojan/master/scripts/quickstart.sh"
 
 # winget writes new PATH entries to the Machine/User registry values, but
 # this already-running PowerShell process keeps its own stale copy of

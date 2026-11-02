@@ -24,7 +24,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Install from the website, as a visitor would
-        run: curl -fsSL https://raw.githubusercontent.com/Raktim94/nodedr-restaurant-pos/master/packaging/deb/install-linux.sh | sudo bash
+        run: curl -fsSL https://raw.githubusercontent.com/ankanz1/Bhojan/master/packaging/deb/install-linux.sh | sudo bash
       - name: Wait for the app to answer
         run: |
           for _ in $(seq 1 120); do
@@ -35,7 +35,7 @@ jobs:
           echo "no answer (last code $code)" >&2; exit 1
       - name: Installed version is the latest release
         run: |
-          latest=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/Raktim94/nodedr-restaurant-pos/releases/latest | sed -n 's|.*/releases/tag/v\{0,1\}||p')
+          latest=$(curl -fsSLI -o /dev/null -w '%{url_effective}' https://github.com/ankanz1/Bhojan/releases/latest | sed -n 's|.*/releases/tag/v\{0,1\}||p')
           have=$(dpkg-query -W -f='${Version}' nodedr-orderrestro)
           echo "latest=$latest installed=$have"; [ "$latest" = "$have" ]
       - name: Remove and purge

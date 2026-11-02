@@ -132,7 +132,7 @@ export default function ComplianceIndiaPage() {
           For questions about this software&rsquo;s architecture or
           security posture, open an issue on{" "}
           <a
-            href="https://github.com/Raktim94/nodedr-restaurant-pos/issues"
+            href="https://github.com/ankanz1/Bhojan/issues"
             className="text-primary underline underline-offset-4"
           >
             GitHub

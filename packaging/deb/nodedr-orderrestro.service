@@ -1,6 +1,6 @@
 [Unit]
 Description=Bhojan (Docker Compose)
-Documentation=https://github.com/Raktim94/nodedr-restaurant-pos/tree/master/docs
+Documentation=https://github.com/ankanz1/Bhojan/tree/master/docs
 Requires=docker.service
 After=docker.service network-online.target
 Wants=network-online.target

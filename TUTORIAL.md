@@ -11,14 +11,14 @@ Get from zero to your first UPI-paid order in about ten minutes, then set up sta
 You need a machine that stays on in the restaurant (a mini PC, an old laptop, a NAS or a VPS) with Docker. The database is created for you on first start.
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Raktim94/nodedr-restaurant-pos/master/scripts/quickstart.sh | bash
+curl -fsSL https://raw.githubusercontent.com/ankanz1/Bhojan/master/scripts/quickstart.sh | bash
 ```
 
 Or from a clone:
 
 ```bash
-git clone https://github.com/Raktim94/nodedr-restaurant-pos.git
-cd nodedr-restaurant-pos
+git clone https://github.com/ankanz1/Bhojan.git
+cd Bhojan
 ./install.sh
 ```
 
@@ -287,7 +287,7 @@ Bhojan has a REST API (`/api/v1`, docs at `/api/docs`), API keys, webhooks and a
 
 Everything lives in your Postgres volume. Use **Settings → Backup** for scheduled backups, and test a restore before you need one.
 
-Questions or bugs: [open an issue](https://github.com/Raktim94/nodedr-restaurant-pos/issues).
+Questions or bugs: [open an issue](https://github.com/ankanz1/Bhojan/issues).
 
 ---
 
