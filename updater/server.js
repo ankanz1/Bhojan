@@ -1,4 +1,4 @@
-// NodeDR OrderRestro updater — a tiny sidecar that moves the app's containers to a
+// Bhojan updater — a tiny sidecar that moves the app's containers to a
 // specific published version. Needed because a container can't replace itself,
 // and because CasaOS pins every image to an exact version (no :latest), so
 // "pull the same tag again" (Watchtower) would never find anything new.
@@ -48,7 +48,7 @@ const json = async (m, p, b) => { const t = await docker(m, p, b); return t ? JS
 const enc = encodeURIComponent;
 
 function splitImage(ref) {
-  // "ghcr.io/raktim94/nodedr-restaurant-pos-backend:1.4.0" -> repo + tag (a registry port
+  // "ghcr.io/ankanz1/bhojan-backend:1.4.0" -> repo + tag (a registry port
   // colon is before the last slash, so only a colon after it is a tag).
   const slash = ref.lastIndexOf('/');
   const colon = ref.indexOf(':', slash + 1);

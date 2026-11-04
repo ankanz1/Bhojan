@@ -69,6 +69,18 @@ RUN apk add --no-cache curl \
 # (npx then can't find the local `prisma` binary and falls back to fetching
 # an arbitrary "latest" version from the registry at container start).
 FROM node:22-alpine AS runtime
+# OCI metadata. The workflow adds version/revision on top of these labels.
+# "authors" keeps the original author attribution; Bhojan is maintained by
+# Ankan Mukherjee (AGPL-3.0-only, see the repository LICENSE).
+LABEL org.opencontainers.image.title="Bhojan Backend" \
+      org.opencontainers.image.description="Bhojan restaurant management API (NestJS)" \
+      org.opencontainers.image.source="https://github.com/ankanz1/Bhojan" \
+      org.opencontainers.image.url="https://github.com/ankanz1/Bhojan" \
+      org.opencontainers.image.documentation="https://github.com/ankanz1/Bhojan#readme" \
+      org.opencontainers.image.licenses="AGPL-3.0-only" \
+      org.opencontainers.image.vendor="Bhojan" \
+      org.opencontainers.image.maintainer="Ankan Mukherjee" \
+      org.opencontainers.image.authors="Raktim Ranjit (original author), Ankan Mukherjee (maintainer)"
 # eudev-libs (libudev.so, used by `usb`'s libusb backend for device
 # enumeration) and libstdc++ (the addon is a C++ build) are the only
 # runtime-side additions for direct-USB printing — libusb itself is

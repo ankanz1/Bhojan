@@ -9,4 +9,5 @@ authors:
 repository-code: https://github.com/ankanz1/Bhojan
 url: https://github.com/ankanz1/Bhojan
 license: AGPL-3.0-only
+version: "1.9.1"
 abstract: "Offline-first, self-hosted restaurant management software with point of sale, tables, kitchen display, reservations, and inventory."

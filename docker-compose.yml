@@ -30,7 +30,7 @@ services:
     # Same name CI publishes. `up --build` tags the local build with it, and
     # the in-app "Update now" button (see the `updater` service below) pulls
     # the published image of a newer version under it.
-    image: ghcr.io/raktim94/nodedr-restaurant-pos-backend:${APP_VERSION:-dev}
+    image: ghcr.io/ankanz1/bhojan-backend:${APP_VERSION:-dev}
     container_name: nodedr-restaurant-backend
     restart: unless-stopped
     environment:
@@ -107,7 +107,7 @@ services:
         # Next bakes rewrite destinations at BUILD time — this must be a
         # build ARG, not a runtime env (see apps/web/Dockerfile comment).
         BACKEND_URL: "http://backend:4000"
-    image: ghcr.io/raktim94/nodedr-restaurant-pos-web:${APP_VERSION:-dev}
+    image: ghcr.io/ankanz1/bhojan-web:${APP_VERSION:-dev}
     container_name: nodedr-restaurant-web
     restart: unless-stopped
     ports:
@@ -126,7 +126,8 @@ services:
   updater:
     build:
       context: ./updater
-    image: ghcr.io/raktim94/nodedr-restaurant-pos-updater:latest
+      dockerfile: Dockerfile
+    image: ghcr.io/ankanz1/bhojan-updater:latest
     container_name: nodedr-restaurant-updater
     restart: unless-stopped
     environment:

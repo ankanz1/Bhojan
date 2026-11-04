@@ -34,6 +34,18 @@ RUN pnpm --filter web build
 
 # --- runtime ---
 FROM node:22-alpine AS runtime
+# OCI metadata. The workflow adds version/revision on top of these labels.
+# "authors" keeps the original author attribution; Bhojan is maintained by
+# Ankan Mukherjee (AGPL-3.0-only, see the repository LICENSE).
+LABEL org.opencontainers.image.title="Bhojan Web" \
+      org.opencontainers.image.description="Bhojan restaurant management web application (Next.js)" \
+      org.opencontainers.image.source="https://github.com/ankanz1/Bhojan" \
+      org.opencontainers.image.url="https://github.com/ankanz1/Bhojan" \
+      org.opencontainers.image.documentation="https://github.com/ankanz1/Bhojan#readme" \
+      org.opencontainers.image.licenses="AGPL-3.0-only" \
+      org.opencontainers.image.vendor="Bhojan" \
+      org.opencontainers.image.maintainer="Ankan Mukherjee" \
+      org.opencontainers.image.authors="Raktim Ranjit (original author), Ankan Mukherjee (maintainer)"
 WORKDIR /app
 ENV NODE_ENV=production
 

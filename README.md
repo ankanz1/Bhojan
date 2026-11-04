@@ -101,6 +101,16 @@ For HTTPS deployments behind a reverse proxy or tunnel, set `FRONTEND_ORIGIN` to
 
 The optional `./install.sh --demo` path seeds sample restaurant data. The ordinary installer does not seed sample users or data.
 
+### Published container images
+
+The repository also publishes multi-architecture (`linux/amd64` and `linux/arm64`) images to GitHub Container Registry for deployments that do not build from source:
+
+- `ghcr.io/ankanz1/bhojan-backend`
+- `ghcr.io/ankanz1/bhojan-web`
+- `ghcr.io/ankanz1/bhojan-updater`
+
+A `master` build publishes `:edge` and `:sha-<commit>`; a version release publishes `:<version>` and `:latest`. The CasaOS/ZimaOS manifest uses all three pinned images, and the Debian package pins the backend and web images to the package version. The repo-root Compose file builds the same images locally from this source tree.
+
 ### Updating a Docker installation
 
 From the project checkout, fetch the desired source update and rebuild the services:

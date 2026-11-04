@@ -16,7 +16,7 @@ export interface VersionInfo {
   checkedAt: string;
 }
 
-const GITHUB_REPO = 'Raktim94/nodedr-restaurant-pos';
+const GITHUB_REPO = 'ankanz1/Bhojan';
 // Avoid hammering GitHub's unauthenticated rate limit (60 req/hr per IP,
 // shared across every self-hosted install behind the same egress IP in the
 // worst case) — a check this infrequent is still fast enough to surface a
@@ -159,7 +159,7 @@ export class UpdateService {
   // than a clear 404 means "can't tell", and the tag is trusted.
   private async imageTagExists(tag: string): Promise<boolean | null> {
     try {
-      const repo = 'raktim94/nodedr-restaurant-pos-backend';
+      const repo = 'ankanz1/bhojan-backend';
       const version = tag.replace(/^v/i, '');
       const tokRes = await fetch(
         `https://ghcr.io/token?scope=repository:${repo}:pull`,
@@ -187,12 +187,31 @@ export class UpdateService {
   }
 
   private async fetchLatestTag(): Promise<string | null> {
+    // GitHub Releases are the canonical version source for Bhojan. Fall back
+    // to tags for a repository that publishes tags without creating a release
+    // (the previous behaviour), but do not retry on rate limits/errors.
+    const releaseRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO}/releases/latest`,
+      {
+        headers: {
+          Accept: 'application/vnd.github+json',
+          'User-Agent': 'bhojan-update-check',
+        },
+        signal: AbortSignal.timeout(5000),
+      },
+    );
+    if (releaseRes.ok) {
+      const release = (await releaseRes.json()) as { tag_name?: string };
+      if (release.tag_name) return release.tag_name;
+    }
+    if (releaseRes.status !== 404) return null;
+
     const res = await fetch(
       `https://api.github.com/repos/${GITHUB_REPO}/tags?per_page=1`,
       {
         headers: {
           Accept: 'application/vnd.github+json',
-          'User-Agent': 'nodedr-restaurant-pos-update-check',
+          'User-Agent': 'bhojan-update-check',
         },
         signal: AbortSignal.timeout(5000),
       },
