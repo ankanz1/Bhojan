@@ -15,14 +15,11 @@ export function ClaimedLanding() {
         Bhojan
       </h1>
       <p className="mt-2 max-w-sm text-sm text-muted-foreground">
-        This instance is already set up. Sign in to your dashboard, or check the docs.
+        This instance is already set up. Sign in to access your dashboard.
       </p>
       <div className="mt-8 flex items-center gap-3">
         <Button size="lg" render={<Link href="/login" />}>
           Sign in
-        </Button>
-        <Button variant="outline" size="lg" render={<Link href="/docs" />}>
-          View documentation
         </Button>
       </div>
     </div>
