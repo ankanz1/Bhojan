@@ -90,32 +90,55 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        image: [bhojan-backend, bhojan-web, bhojan-updater]
-        platform: [linux/amd64, linux/arm64]
         include:
           - image: bhojan-backend
+            platform: linux/amd64
+            runner: ubuntu-latest
             context: .
             dockerfile: apps/backend/Dockerfile
+            slug: amd64
+            title: Bhojan Backend
+            description: Bhojan restaurant management API (NestJS)
+          - image: bhojan-backend
+            platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            context: .
+            dockerfile: apps/backend/Dockerfile
+            slug: arm64
             title: Bhojan Backend
             description: Bhojan restaurant management API (NestJS)
           - image: bhojan-web
+            platform: linux/amd64
+            runner: ubuntu-latest
             context: .
             dockerfile: apps/web/Dockerfile
+            slug: amd64
+            title: Bhojan Web
+            description: Bhojan restaurant management web application (Next.js)
+          - image: bhojan-web
+            platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            context: .
+            dockerfile: apps/web/Dockerfile
+            slug: arm64
             title: Bhojan Web
             description: Bhojan restaurant management web application (Next.js)
           - image: bhojan-updater
-            # The updater image has no workspace dependencies: its build
-            # context is the updater directory and it copies only server.js.
-            context: updater
-            dockerfile: Dockerfile
+            platform: linux/amd64
+            runner: ubuntu-latest
+            context: .
+            dockerfile: updater/Dockerfile
+            slug: amd64
             title: Bhojan Updater
             description: Sidecar updater for Bhojan Docker deployments
-          - platform: linux/amd64
-            runner: ubuntu-latest
-            slug: amd64
-          - platform: linux/arm64
+          - image: bhojan-updater
+            platform: linux/arm64
             runner: ubuntu-24.04-arm
+            context: .
+            dockerfile: updater/Dockerfile
             slug: arm64
+            title: Bhojan Updater
+            description: Sidecar updater for Bhojan Docker deployments
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-buildx-action@v3
