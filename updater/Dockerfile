@@ -13,7 +13,7 @@ LABEL org.opencontainers.image.title="Bhojan Updater" \
       org.opencontainers.image.maintainer="Ankan Mukherjee" \
       org.opencontainers.image.authors="Raktim Ranjit (original author), Ankan Mukherjee (maintainer)"
 WORKDIR /app
-COPY server.js ./
+COPY updater/server.js ./
 USER root
 EXPOSE 8080
 CMD ["node", "server.js"]
